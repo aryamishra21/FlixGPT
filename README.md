@@ -5,6 +5,7 @@
 - Header
 - Routing of App
 - Login, Sign Up Form
+- Validating Form
 
 # Features
 - Login/Sign Up

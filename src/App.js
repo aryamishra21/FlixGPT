@@ -3,7 +3,8 @@ import './App.css';
 import AppLayout from './components/AppLayout';
 import BrowsePage from './pages/BrowsePage';
 import LoginPage from './pages/LoginPage';
-
+import { Provider } from 'react-redux';
+import store from './utils/store/store'
 const route=createBrowserRouter([
   {
       path:'/',
@@ -14,7 +15,7 @@ const route=createBrowserRouter([
           element:<BrowsePage/>,
       },
       {
-          path:'login',
+          path:'/',
           element:<LoginPage/>,
       }
       ]
@@ -23,7 +24,9 @@ const route=createBrowserRouter([
 
 function App() {
   return (
-    <RouterProvider router={route}/>
+    <Provider store={store}>
+      <RouterProvider router={route}/>
+    </Provider>
   );
 }
 

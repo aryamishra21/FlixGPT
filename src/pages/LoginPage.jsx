@@ -3,9 +3,9 @@ import { FaEye } from "react-icons/fa";
 import { checkValidateData } from "../utils/validate";
 import { auth } from "../utils/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile} from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/store/userSlice";
+import { User_Img } from "../utils/constants";
 
 const LoginPage = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
@@ -14,7 +14,6 @@ const LoginPage = () => {
   const email = useRef(null);
   const password = useRef(null);        
   const name = useRef(null);
-  const navigate=useNavigate();
   const dispatch=useDispatch();
 //   useEffect(()=>setErrors({}),[isSignInForm])
   const handleSubmit = () => {
@@ -24,7 +23,6 @@ const LoginPage = () => {
       email?.current?.value,
       password?.current?.value
     );
-    console.log(res);
     setErrors(res);
     // if error then return
     // if (res != {}) return;
@@ -41,11 +39,10 @@ const LoginPage = () => {
           // Signed up
           const user = userCredential.user;
           updateProfile(auth.currentUser, {
-            displayName: name?.current?.value, photoURL: "https://i.pinimg.com/564x/61/54/76/61547625e01d8daf941aae3ffb37f653.jpg"
+            displayName: name?.current?.value, photoURL: User_Img
           }).then(() => {
             const {uid,email,displayName,photoURL} = auth.currentUser;
-            dispatch(addUser({uid:uid,email:email,displayName:displayName,photoURL:photoURL}))
-            navigate('/browse')
+            dispatch(addUser({uid:uid,email:email,displayName:displayName,photoURL:photoURL})) 
             // Profile updated!
             // ...
           }).catch((error) => {
@@ -53,7 +50,6 @@ const LoginPage = () => {
             // An error occurred
             // ...
           });
-          console.log(user, "created user");
           // ...
         })
         .catch((error) => {
@@ -67,7 +63,6 @@ const LoginPage = () => {
           }
         });
     } else {
-        console.log('login')
         //firebase docs login user
       signInWithEmailAndPassword(
         auth,
@@ -77,13 +72,11 @@ const LoginPage = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(user, "user");
           // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(errorMessage,errorCode)
           if(errorCode=='auth/invalid-credential'){
               setErrors({ main: 'Invalid Credentials' });
           }
